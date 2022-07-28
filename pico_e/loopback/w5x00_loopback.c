@@ -18,6 +18,7 @@
 #include "w5x00_spi.h"
 #include "w5x00_lwip.h"
 
+
 #include "lwip/init.h"
 #include "lwip/netif.h"
 #include "lwip/timeouts.h"
@@ -87,7 +88,7 @@ int main()
     stdio_init_all();
 
     sleep_ms(1000 * 3); // wait for 3 seconds
-
+#if 0
     wizchip_spi_initialize();
     wizchip_cris_initialize();
 
@@ -98,7 +99,8 @@ int main()
     // Set ethernet chip MAC address
     setSHAR(mac);
     ctlwizchip(CW_RESET_PHY, 0);
-
+#endif
+    wizchip_arch_init();
     // Initialize LWIP in NO_SYS mode
     lwip_init();
 
@@ -114,13 +116,14 @@ int main()
     netif_set_status_callback(&g_netif, netif_status_callback);
 
     // MACRAW socket open
+    #if 0
     retval = socket(SOCKET_MACRAW, Sn_MR_MACRAW, PORT_LWIPERF, 0x00);
 
     if (retval < 0)
     {
         printf(" MACRAW socket open failed\n");
     }
-
+    #endif
     // Set the default interface and bring it up
     netif_set_link_up(&g_netif);
     netif_set_up(&g_netif);
